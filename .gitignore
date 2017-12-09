@@ -1,0 +1,13 @@
+# User specific & automatically generated files #
+/node_modules
+#/plugins
+/client/dist
+/client/node_modules
+
+*.mo
+
+# IDE and editor specific files #
+#################################
+
+# OS generated files #
+######################
