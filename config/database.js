@@ -1,12 +1,9 @@
 const crypto = require('crypto').randomBytes(256).toString('hex'); // Provides cryptographic functionality (OpenSSL's hash, HMAC, cipher, decipher, sign and verify functions)
 
-
-
-
 // setting mongo db connection
 var options = {
   useMongoClient: true,
-  autoIndex: false, // Don't build indexes
+  //autoIndex: false, // Don't build indexes
   reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
   poolSize: 10, // Maintain up to 10 socket connections
@@ -16,8 +13,8 @@ var options = {
 
 //sent export url mongo
 module.exports = {
-	uri: 'mongodb://localhost:27017/' + this.db,
+	uri: 'mongodb://localhost:27017/axis_db',
   secret : crypto,
-	db: 'company_profile',
+	db: 'axis_db',
 	option: options
 }
