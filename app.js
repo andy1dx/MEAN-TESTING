@@ -1,23 +1,20 @@
 //importing modules
 
-//express module
-var express = require('express');
+
+var express = require('express'); //express module
+const router = express.Router();   //set router for public
 
 //import for express route
-var index = require('./route/index');
+//var index = require('./routes/index');
 
-//mongod db modude
-var mongoose = require('mongoose');
-
-//import config file
-var config = require('./config/database');
-
-//import node path
-var path = require('path');
+var mongoose = require('mongoose');  //mongod db modude
+var config = require('./config/database'); //import config file 
+var bodyParser = require('body-parser'); //importing body parser
+var path = require('path');  //import node path
+const authentication = require('./Routes/authentication')(router);  //set routes files
 
 //express config
-//set port
-var port = 3000;
+var port = 3000; //set port
 
 /*********************************************************
 **                                                      **
@@ -25,7 +22,7 @@ var port = 3000;
 **                                                      **
 *********************************************************/
 //set monggose db
-mongoose.promise = global.promise;
+mongoose.Promise = global.Promise;
 mongoose.connect(config.uri,config.option);
 
 //on connection 
@@ -51,7 +48,20 @@ mongoose.connection.on('error',(err)=>{
 //set app express
 var app = express();
 
+app.use(express.static(path.join(__dirname + '/client/dist/')));
 
+
+/*********************************************************
+**                                                      **
+**                body parser  configuration            **
+**                                                      **
+*********************************************************/
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 /*********************************************************
 **                                                      **
@@ -60,10 +70,10 @@ var app = express();
 *********************************************************/
 
 
- app.use(express.static(path.join(__dirname + '/client/dist/')));
+ 
 
 // set static  folder for route
-//app.use('/', index);
+app.use('/authentication', authentication);
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/dist/index.html'))
 });
