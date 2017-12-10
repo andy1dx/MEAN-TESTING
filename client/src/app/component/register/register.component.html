@@ -1,0 +1,57 @@
+<div class="container">
+	<h1>
+	  register works!
+	</h1>
+	<form [formGroup]="formRegister" (submit)="onRegisterSubmit()">
+		<!-- email input -->
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.email.errors && formRegister.controls.email.dirty),'has-success': (!formRegister.controls.email.errors)}">
+		    <label for="email">Email address</label>
+		    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" formControlName="email" placeholder="Enter email">
+		      <!-- Validation -->
+		      <ul class="help-block">
+		        <li *ngIf="formRegister.controls.email.errors?.required && formRegister.controls.email.dirty">This field is required</li>
+		        <li *ngIf="(formRegister.controls.email.errors?.minlength && formRegister.controls.email.dirty || formRegister.controls.email.errors?.maxlength && formRegister.controls.email.dirty ) && formRegister.controls.email.dirty">Minimum characters: 5, Maximum characters: 30</li>
+		        <li *ngIf="formRegister.controls.email.errors?.validateEmail && formRegister.controls.email.dirty">This must be a valid e-mail</li>
+		      </ul>
+
+	    </div>
+		<!-- username input -->	    
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.username.errors && formRegister.controls.username.dirty),'has-success': (!formRegister.controls.username.errors)}">
+		    <label for="username">Username</label>
+		    <input type="text" class="form-control" id="username" aria-describedby="Username" name="username" formControlName="username" placeholder="Enter Username">
+ 			<!-- Validation -->
+	      <ul class="help-block">
+	        <li *ngIf="formRegister.controls.username.errors?.required && formRegister.controls.username.dirty">This field is required</li>
+	        <li *ngIf="formRegister.controls.username.errors?.minlength && formRegister.controls.username.dirty || formRegister.controls.username.errors?.maxlength && formRegister.controls.username.dirty ">Minimum characters: 3, Maximum characters: 15</li>
+	        <li *ngIf="formRegister.controls.username.errors?.validateUsername && formRegister.controls.username.dirty">Username must not have any special characters</li>
+	      </ul>
+
+	    </div>
+		<!-- password input -->	    
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.password.errors && formRegister.controls.password.dirty),'has-success': (!formRegister.controls.password.errors)}">
+		    <label for="password">Password</label>
+		    <input type="password" class="form-control" id="password" aria-describedby="password" name="password" formControlName="password" placeholder="Enter password">
+		      <!-- Validation -->
+		      <ul class="help-block">
+		        <li *ngIf="formRegister.controls.password.errors?.required && formRegister.controls.password.dirty">This field is required</li>
+		        <li *ngIf="formRegister.controls.password.errors?.minlength && formRegister.controls.password.dirty || formRegister.controls.password.errors?.maxlength && formRegister.controls.password.dirty ">Minimum characters: 8, Maximum characters: 35</li>
+		        <li *ngIf="formRegister.controls.password.errors?.validatePassword && formRegister.controls.password.dirty">Password must be at least 8 characters but no more than 35</li>
+		      </ul>		    
+	    </div>
+		<!-- confirm input -->	    
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.confirm.errors && formRegister.controls.confirm.dirty),'has-success': (!formRegister.controls.confirm.errors)}">
+		    <label for="confirm">Confirm Password</label>
+		    <input type="password" class="form-control" id="confirm" aria-describedby="confirm" name="confirm" formControlName="confirm" placeholder="Confirm Password">
+		      <!-- Validation -->
+		      <ul class="help-block">
+		        <li *ngIf="formRegister.controls.confirm.errors?.required && formRegister.controls.confirm.dirty">This field is required</li>
+		        <li *ngIf="formRegister.errors?.matchingPasswords && formRegister.controls.confirm.dirty">Password do not match</li>
+		      </ul>	    
+	    </div>
+	    <input [disabled]="!formRegister.valid" type="submit" class="btn btn-primary" value="submit" />
+	</form>
+	<!-- 	<p>email : {{ formRegister.controls.email.value }}</p>
+	<p>Username : {{ formRegister.controls.username.value }}</p>
+	<p>password : {{ formRegister.controls.password.value }}</p>
+	<p>confirm : {{ formRegister.controls.confirm.value }}</p> -->
+</div>

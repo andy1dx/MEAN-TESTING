@@ -23,7 +23,6 @@
         "styles.css"
       ],
       "scripts": [
-        "./assets/Boostrap/js/bootstrap.min.js"
       ],
       "environments": {
         "source": "environments/environment.ts",
