@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,8 +12,21 @@ export class RegisterComponent implements OnInit {
 
 	formRegister: FormGroup;
 
+  messageClass;
+  message;
+
+  processing;
+
+  emailValid;
+  emailMessage;
+
+  usernameValid;
+  usernameMessage;  
+
 	constructor(
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+    private authService : AuthService,
+    private router : Router
 	) { 
 	  	this.createForm();
 	}
@@ -92,8 +107,74 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  //enabled form
+  enableForm(){
+    this.formRegister.controls['email'].enable();
+    this.formRegister.controls['username'].enable();
+    this.formRegister.controls['password'].enable();
+    this.formRegister.controls['confirm'].enable();
+  }
+
+  disableForm(){
+    this.formRegister.controls['email'].disable();
+    this.formRegister.controls['username'].disable();
+    this.formRegister.controls['password'].disable();
+    this.formRegister.controls['confirm'].disable();
+
+  }
+
+  //disabled form
+
+
+  //check email
+  checkEmail(){
+    this.authService.checkEmail(this.formRegister.get('email').value).subscribe(data => {
+      if(!data.success){
+        this.emailValid = false;
+        this.emailMessage = data.message;
+      }else{
+        this.emailValid = true;
+        this.emailMessage = data.message;        
+      }
+    });
+  }
+
+  //check username
+  checkUsername(){
+    this.authService.checkUsername(this.formRegister.get('username').value).subscribe(data => {
+      if(!data.success){
+        this.usernameValid = false;
+        this.usernameMessage = data.message;
+      }else{
+        this.usernameValid = true;
+        this.usernameMessage = data.message;        
+      }
+    });
+  }
+
 	onRegisterSubmit(){
-		console.log('submitted');
+    this.processing = true;
+    this.disableForm();
+    const newUser = {
+      email: this.formRegister.get('email').value,
+      username: this.formRegister.get('username').value,
+      password: this.formRegister.get('password').value,
+    }
+		
+    this.authService.registerUser(newUser).subscribe(data => {
+      if(!data.success){
+        this.messageClass = 'alert alert-danger';
+        this.message = data.message;
+        this.processing = false;
+        this.enableForm();
+      }else{ 
+        this.messageClass = 'alert alert-success';
+        this.message = data.message;
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000)
+      }
+    });
 	}
 
 	ngOnInit() {

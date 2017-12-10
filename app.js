@@ -11,6 +11,7 @@ var mongoose = require('mongoose');  //mongod db modude
 var config = require('./config/database'); //import config file 
 var bodyParser = require('body-parser'); //importing body parser
 var path = require('path');  //import node path
+var cors = require('cors') // import cors
 const authentication = require('./Routes/authentication')(router);  //set routes files
 
 //express config
@@ -50,6 +51,22 @@ var app = express();
 
 app.use(express.static(path.join(__dirname + '/client/dist/')));
 
+
+
+/*********************************************************
+**                                                      **
+**                cors  configuration                   **
+**                                                      **
+*********************************************************/
+
+	// var corsOptions = {
+	//   origin: 'http://example.com',
+	//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+	// }
+
+app.use(cors({
+	origin: 'http://localhost:4200'
+}));
 
 /*********************************************************
 **                                                      **

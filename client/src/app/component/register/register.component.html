@@ -2,28 +2,33 @@
 	<h1>
 	  register works!
 	</h1>
+	<div [ngClass] = "messageClass">
+		{{ message }}
+	</div>
 	<form [formGroup]="formRegister" (submit)="onRegisterSubmit()">
 		<!-- email input -->
-		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.email.errors && formRegister.controls.email.dirty),'has-success': (!formRegister.controls.email.errors)}">
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.email.errors && formRegister.controls.email.dirty) || (!emailValid && formRegister.controls.email.dirty),'has-success': (!formRegister.controls.email.errors)}">
 		    <label for="email">Email address</label>
-		    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" formControlName="email" placeholder="Enter email">
+		    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" formControlName="email" placeholder="Enter email" (blur)="checkEmail()">
 		      <!-- Validation -->
 		      <ul class="help-block">
 		        <li *ngIf="formRegister.controls.email.errors?.required && formRegister.controls.email.dirty">This field is required</li>
 		        <li *ngIf="(formRegister.controls.email.errors?.minlength && formRegister.controls.email.dirty || formRegister.controls.email.errors?.maxlength && formRegister.controls.email.dirty ) && formRegister.controls.email.dirty">Minimum characters: 5, Maximum characters: 30</li>
 		        <li *ngIf="formRegister.controls.email.errors?.validateEmail && formRegister.controls.email.dirty">This must be a valid e-mail</li>
+		         <li *ngIf="emailMessage">{{ emailMessage }}</li>
 		      </ul>
 
 	    </div>
 		<!-- username input -->	    
-		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.username.errors && formRegister.controls.username.dirty),'has-success': (!formRegister.controls.username.errors)}">
+		<div class="form-group" [ngClass]="{'has-error': (formRegister.controls.username.errors && formRegister.controls.username.dirty) || (!usernameValid && formRegister.controls.username.dirty),'has-success': (!formRegister.controls.username.errors)}">
 		    <label for="username">Username</label>
-		    <input type="text" class="form-control" id="username" aria-describedby="Username" name="username" formControlName="username" placeholder="Enter Username">
+		    <input type="text" class="form-control" id="username" aria-describedby="Username" name="username" formControlName="username" placeholder="Enter Username" (blur)="checkUsername()">
  			<!-- Validation -->
 	      <ul class="help-block">
 	        <li *ngIf="formRegister.controls.username.errors?.required && formRegister.controls.username.dirty">This field is required</li>
 	        <li *ngIf="formRegister.controls.username.errors?.minlength && formRegister.controls.username.dirty || formRegister.controls.username.errors?.maxlength && formRegister.controls.username.dirty ">Minimum characters: 3, Maximum characters: 15</li>
 	        <li *ngIf="formRegister.controls.username.errors?.validateUsername && formRegister.controls.username.dirty">Username must not have any special characters</li>
+	        <li *ngIf="usernameMessage">{{ usernameMessage }}</li>
 	      </ul>
 
 	    </div>
@@ -48,7 +53,7 @@
 		        <li *ngIf="formRegister.errors?.matchingPasswords && formRegister.controls.confirm.dirty">Password do not match</li>
 		      </ul>	    
 	    </div>
-	    <input [disabled]="!formRegister.valid" type="submit" class="btn btn-primary" value="submit" />
+	    <input [disabled]="!formRegister.valid || processing || !emailValid || !usernameValid" type="submit" class="btn btn-primary" value="submit" />
 	</form>
 	<!-- 	<p>email : {{ formRegister.controls.email.value }}</p>
 	<p>Username : {{ formRegister.controls.username.value }}</p>
